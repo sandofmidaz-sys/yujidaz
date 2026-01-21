@@ -1,13 +1,5 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Valentine's Day</title>
-  <link rel="stylesheet" href="styles.css">
-</head>
 <body>
-  <!-- Floating hearts -->
+  <!-- Background hearts (always floating) -->
   <div class="background-hearts">
     <div class="heart"></div>
     <div class="heart"></div>
@@ -16,8 +8,14 @@
     <div class="heart"></div>
   </div>
 
-  <!-- Main card -->
-  <div class="container">
+  <!-- Envelope overlay -->
+  <div class="envelope-container" id="envelopeContainer">
+    <div class="envelope" id="envelope">💌</div>
+    <p class="envelope-text">Click to open your Valentine!</p>
+  </div>
+
+  <!-- Main card (hidden until envelope opens) -->
+  <div class="container hidden" id="mainCard">
     <div class="card">
       <div class="emoji-display">💕</div>
       <h1 class="question">Camille Anndrea Julgan Lebico, will you be my Valentine? :3 -Josh Daz</h1>
@@ -37,4 +35,3 @@
 
   <script src="script.js"></script>
 </body>
-</html>
