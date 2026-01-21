@@ -1,55 +1,111 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Valentine Adventure</title>
-  <link rel="stylesheet" href="styles.css">
-</head>
-<body>
-  <!-- Drifting emojis container -->
-  <div id="floating-emojis"></div>
+const gameContainer = document.getElementById("gameContainer");
+const catchHeart = document.getElementById("catchHeart");
+const envelopeContainer = document.getElementById("envelopeContainer");
+const envelope = document.getElementById("envelope");
+const mainCard = document.getElementById("mainCard");
+const yesButton = document.getElementById("yesButton");
+const noButton = document.getElementById("noButton");
+const celebration = document.getElementById("celebration");
+const floatingContainer = document.getElementById("floating-emojis");
 
-  <!-- Background hearts -->
-  <div class="background-hearts">
-    <div class="heart"></div>
-    <div class="heart"></div>
-    <div class="heart"></div>
-    <div class="heart"></div>
-    <div class="heart"></div>
-  </div>
+const dodgeDistance = 150;
 
-  <!-- Mini-game: Catch the heart -->
-  <div class="game-container" id="gameContainer">
-    <h2>Catch the heart to get your Valentine!</h2>
-    <div class="catch-heart" id="catchHeart">💖</div>
-  </div>
+// ------------------ DRIFTING EMOJIS ------------------
+const driftingEmojis = ['💖','✨','🌸','💌','🐱','🎀','🍬'];
 
-  <!-- Envelope overlay -->
-  <div class="envelope-container hidden" id="envelopeContainer">
-    <div class="envelope" id="envelope">💌</div>
-    <p class="envelope-text">Click to open your Valentine!</p>
-  </div>
+function spawnDriftingEmoji() {
+    const el = document.createElement('div');
+    el.textContent = driftingEmojis[Math.floor(Math.random() * driftingEmojis.length)];
+    el.style.left = Math.random() * window.innerWidth + 'px';
+    el.style.top = Math.random() * window.innerHeight + 'px';
+    el.style.fontSize = (Math.random() * 24 + 20) + 'px';
+    el.style.opacity = Math.random() * 0.8 + 0.2;
+    floatingContainer.appendChild(el);
 
-  <!-- Main card (hidden until envelope opens) -->
-  <div class="container hidden" id="mainCard">
-    <div class="card">
-      <div class="emoji-display">💕</div>
-      <h1 class="question">Camille Anndrea Julgan Lebico, will you be my Valentine? :3 -Josh Daz</h1>
-      <p class="subtitle">my treat hehe :3</p>
+    let posY = parseFloat(el.style.top);
+    let sway = Math.random() * 2 - 1; // horizontal sway
+    let swayDirection = Math.random() < 0.5 ? -1 : 1;
 
-      <div class="button-container">
-        <button class="button yes-button" id="yesButton">YES! 💖</button>
-        <button class="button no-button" id="noButton">No</button>
-      </div>
-    </div>
+    function drift() {
+        posY -= 0.5;
+        let posX = parseFloat(el.style.left) + sway * swayDirection;
+        el.style.top = posY + 'px';
+        el.style.left = posX + 'px';
 
-    <div class="celebration hidden" id="celebration">
-      <h2>YESSS!! 🎉</h2>
-      <p>I'm so happy! Let's make it amazing!</p>
-    </div>
-  </div>
+        sway += Math.random() * 0.2 - 0.1;
+        if (posY < -50) el.remove();
+        else requestAnimationFrame(drift);
+    }
 
-  <script src="script.js"></script>
-</body>
-</html>
+    drift();
+}
+
+// Spawn emojis continuously
+setInterval(spawnDriftingEmoji, 500);
+
+// ------------------ MINI-GAME: CATCH THE HEART ------------------
+catchHeart.style.left = `${Math.random()*window.innerWidth/2 + window.innerWidth/4}px`;
+catchHeart.style.top = `${Math.random()*window.innerHeight/2 + window.innerHeight/4}px`;
+
+catchHeart.addEventListener('click', () => {
+    gameContainer.classList.add('hidden');
+    envelopeContainer.classList.remove('hidden');
+});
+
+// ------------------ ENVELOPE OPEN ------------------
+envelopeContainer.addEventListener('click', () => {
+    envelope.classList.add('open');
+    setTimeout(() => {
+        envelopeContainer.style.display = 'none';
+        mainCard.classList.remove('hidden');
+    }, 600);
+});
+
+// ------------------ NO BUTTON DODGE ------------------
+noButton.addEventListener('mousemove', (e) => {
+    const rect = noButton.getBoundingClientRect();
+    const cursorX = e.clientX;
+    const cursorY = e.clientY;
+
+    const btnCenterX = rect.left + rect.width / 2;
+    const btnCenterY = rect.top + rect.height / 2;
+
+    const dx = btnCenterX - cursorX;
+    const dy = btnCenterY - cursorY;
+    const distance = Math.sqrt(dx * dx + dy * dy);
+
+    if (distance < 100) {
+        let newX = rect.left + dx / distance * dodgeDistance;
+        let newY = rect.top + dy / distance * dodgeDistance;
+
+        newX = Math.max(10, Math.min(window.innerWidth - rect.width - 10, newX));
+        newY = Math.max(10, Math.min(window.innerHeight - rect.height - 10, newY));
+
+        noButton.style.left = newX + 'px';
+        noButton.style.top = newY + 'px';
+    }
+});
+
+// ------------------ YES BUTTON ------------------
+yesButton.addEventListener('click', () => {
+    celebration.classList.remove('hidden');
+    spawnCelebration('💖', 30);
+    spawnCelebration('✨', 25);
+    spawnCelebration('🎉', 20);
+});
+
+// ------------------ CELEBRATION EMOJIS ------------------
+function spawnCelebration(emoji, count) {
+    for (let i = 0; i < count; i++) {
+        const el = document.createElement('div');
+        el.textContent = emoji;
+        el.style.position = 'fixed';
+        el.style.left = Math.random() * window.innerWidth + 'px';
+        el.style.top = Math.random() * window.innerHeight + 'px';
+        el.style.fontSize = (Math.random() * 30 + 20) + 'px';
+        el.style.pointerEvents = 'none';
+        el.style.transition = 'all 3s linear';
+        document.body.appendChild(el);
+        setTimeout(() => el.remove(), 3000);
+    }
+}
