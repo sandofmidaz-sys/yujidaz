@@ -10,29 +10,31 @@
   <!-- Floating emojis in the background -->
   <div id="floating-emojis"></div>
 
-  <!-- Mini-game: Drag hearts into envelope -->
-  <div class="game-container" id="gameContainer">
+  <!-- Mini-game container -->
+  <div id="gameContainer">
     <h2>Drag the hearts into the envelope to unlock your Valentine!</h2>
-    <div id="envelopeContainer" class="envelope-container">
-      <div class="envelope" id="envelope">💌</div>
-      <p class="envelope-text">Drag hearts here!</p>
+
+    <!-- Draggable hearts will be inserted by JS -->
+
+    <!-- Envelope to drop hearts into -->
+    <div id="envelopeContainer">
+      <div id="envelope">💌</div>
+      <p>Drag hearts here!</p>
     </div>
   </div>
 
-  <!-- Main card -->
-  <div class="container hidden" id="mainCard">
+  <!-- Main Valentine card -->
+  <div id="mainCard" class="hidden">
     <div class="card">
       <div class="emoji-display">💕</div>
-      <h1 class="question">Camille Anndrea Julgan Lebico, will you be my Valentine? :3 -Josh Daz</h1>
-      <p class="subtitle">my treat hehe :3</p>
-
+      <h1>Camille Anndrea Julgan Lebico, will you be my Valentine? :3 -Josh Daz</h1>
+      <p>my treat hehe :3</p>
       <div class="button-container">
-        <button class="button yes-button" id="yesButton">YES! 💖</button>
-        <button class="button no-button" id="noButton">No</button>
+        <button id="yesButton" class="button yes-button">YES! 💖</button>
+        <button id="noButton" class="button no-button">No</button>
       </div>
     </div>
-
-    <div class="celebration hidden" id="celebration">
+    <div id="celebration" class="hidden">
       <h2>YESSS!! 🎉</h2>
       <p>I'm so happy! Let's make it amazing!</p>
     </div>
