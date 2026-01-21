@@ -1,45 +1,60 @@
-const envelope = document.getElementById("envelope");
+const gameContainer = document.getElementById("gameContainer");
+const catchHeart = document.getElementById("catchHeart");
 const envelopeContainer = document.getElementById("envelopeContainer");
+const envelope = document.getElementById("envelope");
 const mainCard = document.getElementById("mainCard");
-const noButton = document.getElementById("noButton");
 const yesButton = document.getElementById("yesButton");
+const noButton = document.getElementById("noButton");
 const celebration = document.getElementById("celebration");
 const floatingContainer = document.getElementById("floating-emojis");
+
 const dodgeDistance = 150;
 
-// Cute emojis for drifting
+// ------------------ DRIFTING EMOJIS ------------------
 const driftingEmojis = ['💖','✨','🌸','💌','🐱','🎀','🍬'];
 
-// ------------------ DRIFTING EMOJIS ------------------
 function spawnDriftingEmoji() {
     const el = document.createElement('div');
     el.textContent = driftingEmojis[Math.floor(Math.random() * driftingEmojis.length)];
     el.style.left = Math.random() * window.innerWidth + 'px';
-    el.style.top = window.innerHeight + 'px';
+    el.style.top = Math.random() * window.innerHeight + 'px';
     el.style.fontSize = (Math.random() * 24 + 20) + 'px';
     el.style.opacity = Math.random() * 0.8 + 0.2;
     floatingContainer.appendChild(el);
 
-    let posY = window.innerHeight;
-    const speed = Math.random() * 1.5 + 0.5;
+    let posY = parseFloat(el.style.top);
+    let sway = Math.random() * 2 - 1; // horizontal sway
+    let swayDirection = Math.random() < 0.5 ? -1 : 1;
 
-    const interval = setInterval(() => {
-        posY -= speed;
+    function drift() {
+        posY -= 0.5;
+        let posX = parseFloat(el.style.left) + sway * swayDirection;
         el.style.top = posY + 'px';
-        if (posY < -50) {
-            el.remove();
-            clearInterval(interval);
-        }
-    }, 20);
+        el.style.left = posX + 'px';
+
+        sway += Math.random() * 0.2 - 0.1;
+        if (posY < -50) el.remove();
+        else requestAnimationFrame(drift);
+    }
+
+    drift();
 }
 
 // Spawn emojis continuously
-setInterval(spawnDriftingEmoji, 300);
+setInterval(spawnDriftingEmoji, 500);
+
+// ------------------ MINI-GAME: CATCH THE HEART ------------------
+catchHeart.style.left = `${Math.random()*window.innerWidth/2 + window.innerWidth/4}px`;
+catchHeart.style.top = `${Math.random()*window.innerHeight/2 + window.innerHeight/4}px`;
+
+catchHeart.addEventListener('click', () => {
+    gameContainer.classList.add('hidden');
+    envelopeContainer.classList.remove('hidden');
+});
 
 // ------------------ ENVELOPE OPEN ------------------
 envelopeContainer.addEventListener('click', () => {
     envelope.classList.add('open');
-
     setTimeout(() => {
         envelopeContainer.style.display = 'none';
         mainCard.classList.remove('hidden');
