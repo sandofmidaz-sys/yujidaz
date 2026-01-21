@@ -1,5 +1,47 @@
-.hidden { display: none; }
+/* ------------------ BODY & BACKGROUND ------------------ */
+body {
+  margin: 0;
+  font-family: 'Comic Sans MS', cursive, sans-serif;
+  background: linear-gradient(135deg, #ffeef2, #fce5f0, #fff0f5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  overflow: hidden;
+  text-align: center;
+}
 
+/* ------------------ FLOATING HEARTS ------------------ */
+.background-hearts .heart {
+  position: absolute;
+  width: 25px;
+  height: 25px;
+  background: #ffb3c9;
+  transform: rotate(45deg);
+  animation: floatHeart linear infinite;
+  opacity: 0.7;
+}
+
+.background-hearts .heart::before,
+.background-hearts .heart::after {
+  content: '';
+  position: absolute;
+  width: 25px;
+  height: 25px;
+  background: #ffb3c9;
+  border-radius: 50%;
+}
+
+.background-hearts .heart::before { top: -12px; left: 0; }
+.background-hearts .heart::after { left: 12px; top: 0; }
+
+@keyframes floatHeart {
+  0% { transform: translateY(100vh) rotate(45deg); opacity:0.5;}
+  50% { opacity:0.8; }
+  100% { transform: translateY(-100vh) rotate(45deg); opacity:0.5;}
+}
+
+/* ------------------ ENVELOPE ------------------ */
 .envelope-container {
   position: fixed;
   top: 50%;
@@ -12,7 +54,7 @@
 
 .envelope {
   font-size: 80px;
-  transition: transform 0.5s ease, rotate 0.5s ease;
+  transition: transform 0.5s ease;
 }
 
 .envelope.open {
@@ -23,4 +65,80 @@
   font-size: 18px;
   color: #ff4d85;
   margin-top: 10px;
+}
+
+/* ------------------ CARD ------------------ */
+.hidden { display: none; }
+
+.container {
+  position: relative;
+  z-index: 10;
+}
+
+.card {
+  background: rgba(255,255,255,0.95);
+  padding: 40px 30px;
+  border-radius: 20px;
+  max-width: 450px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+}
+
+/* ------------------ TEXT ------------------ */
+.emoji-display { font-size: 40px; }
+
+.question {
+  color: #ff1f5c;
+  font-size: 22px;
+  margin: 20px 0 10px 0;
+}
+
+.subtitle {
+  color: #ff4d85;
+  font-size: 18px;
+  margin-bottom: 30px;
+}
+
+/* ------------------ BUTTONS ------------------ */
+.button-container { position: relative; height: 120px; }
+
+.button {
+  padding: 15px 25px;
+  font-size: 18px;
+  border: none;
+  border-radius: 50px;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.yes-button {
+  background: #ff4d85;
+  color: white;
+  box-shadow: 0 0 15px #ff99b2;
+}
+.yes-button:hover {
+  transform: scale(1.1);
+  box-shadow: 0 0 25px #ff1f5c;
+}
+
+.no-button {
+  background: #ffb3c9;
+  color: #ff1f5c;
+  position: fixed;
+  font-size: 18px;
+  padding: 15px 25px;
+  border-radius: 50px;
+  cursor: pointer;
+  animation: wobble 1s infinite alternate;
+}
+
+@keyframes wobble {
+  0% { transform: rotate(-5deg); }
+  100% { transform: rotate(5deg); }
+}
+
+/* ------------------ CELEBRATION ------------------ */
+.celebration {
+  margin-top: 20px;
+  font-size: 1.2rem;
+  color: #ff4d85;
 }
