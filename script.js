@@ -1,5 +1,5 @@
 // ELEMENTS
-const gameContainer = document.getElementById("gameContainer");
+const heartsContainer = document.getElementById("heartsContainer");
 const envelopeContainer = document.getElementById("envelopeContainer");
 const envelope = document.getElementById("envelope");
 const mainCard = document.getElementById("mainCard");
@@ -7,6 +7,9 @@ const yesButton = document.getElementById("yesButton");
 const noButton = document.getElementById("noButton");
 const celebration = document.getElementById("celebration");
 const floatingContainer = document.getElementById("floating-emojis");
+
+let heartsCollected = 0;
+const totalHearts = 10;
 
 // ---------------- FLOATING EMOJIS ----------------
 const driftingEmojis = ['💖','✨','🌸','💌','🐱','🎀','🍬'];
@@ -35,58 +38,36 @@ function spawnDriftingEmoji() {
 }
 setInterval(spawnDriftingEmoji, 500);
 
-// ---------------- MINI-GAME: DRAG HEARTS ----------------
-const heartsCount = 8;
-let heartsCollected = 0;
+// ---------------- MINI-GAME: CLICK HEARTS ----------------
+function spawnHearts(){
+  for(let i=0;i<totalHearts;i++){
+    const heart = document.createElement('div');
+    heart.className = 'heart-float';
+    heart.textContent = '💖';
+    heart.style.left = Math.random()*(window.innerWidth-50)+'px';
+    heart.style.top = Math.random()*(window.innerHeight/2)+'px';
+    heartsContainer.appendChild(heart);
 
-for(let i=0;i<heartsCount;i++){
-  const heart = document.createElement('div');
-  heart.textContent='💖';
-  heart.className='heart-drag';
-  heart.style.left = Math.random()*(window.innerWidth-50)+'px';
-  heart.style.top = Math.random()*(window.innerHeight/2)+'px';
-  gameContainer.appendChild(heart);
-
-  heart.onmousedown = function(e){
-    let shiftX = e.clientX - heart.getBoundingClientRect().left;
-    let shiftY = e.clientY - heart.getBoundingClientRect().top;
-
-    function moveAt(pageX,pageY){
-      heart.style.left = pageX-shiftX+'px';
-      heart.style.top = pageY-shiftY+'px';
-    }
-    moveAt(e.pageX,e.pageY);
-
-    function onMouseMove(e){ moveAt(e.pageX,e.pageY); }
-    document.addEventListener('mousemove',onMouseMove);
-
-    heart.onmouseup=function(){
-      document.removeEventListener('mousemove',onMouseMove);
-      heart.onmouseup=null;
-
-      // check if over envelope
-      const heartRect = heart.getBoundingClientRect();
-      const envRect = envelope.getBoundingClientRect();
-      if(!(heartRect.right<envRect.left || heartRect.left>envRect.right || heartRect.bottom<envRect.top || heartRect.top>envRect.bottom)){
-        heart.remove();
-        heartsCollected++;
-        if(heartsCollected>=heartsCount){
-          envelopeContainer.classList.remove('hidden');
-        }
+    heart.addEventListener('click', ()=>{
+      heart.remove();
+      heartsCollected++;
+      if(heartsCollected>=totalHearts){
+        envelopeContainer.classList.remove('locked');
+        envelopeContainer.querySelector('p').textContent = "Click the envelope to open your Valentine!";
       }
-    }
+    });
   }
-  heart.ondragstart=()=>false;
 }
+spawnHearts();
 
 // ---------------- ENVELOPE OPEN ----------------
 envelope.addEventListener('click',()=>{
+  if(envelopeContainer.classList.contains('locked')) return;
   envelope.classList.add('open');
   setTimeout(()=>{
-    gameContainer.classList.add('hidden');
-    envelopeContainer.style.display='none';
+    document.getElementById('gameContainer').classList.add('hidden');
     mainCard.classList.remove('hidden');
-  },600);
+  }, 600);
 });
 
 // ---------------- NO BUTTON DODGE ----------------
