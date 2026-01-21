@@ -2,6 +2,7 @@
 const heartsContainer = document.getElementById("heartsContainer");
 const envelopeContainer = document.getElementById("envelopeContainer");
 const envelope = document.getElementById("envelope");
+const chains = document.getElementById("chains");
 const mainCard = document.getElementById("mainCard");
 const yesButton = document.getElementById("yesButton");
 const noButton = document.getElementById("noButton");
@@ -9,7 +10,7 @@ const celebration = document.getElementById("celebration");
 const floatingContainer = document.getElementById("floating-emojis");
 
 let heartsCollected = 0;
-const totalHearts = 10;
+const totalHearts = 20;
 
 // ---------------- FLOATING EMOJIS ----------------
 const driftingEmojis = ['💖','✨','🌸','💌','🐱','🎀','🍬'];
@@ -51,8 +52,10 @@ function spawnHearts(){
     heart.addEventListener('click', ()=>{
       heart.remove();
       heartsCollected++;
-      if(heartsCollected>=totalHearts){
+      document.getElementById('heartCounter').textContent = `Hearts collected: ${heartsCollected} / ${totalHearts}`;
+      if(heartsCollected >= totalHearts){
         envelopeContainer.classList.remove('locked');
+        chains.remove();
         envelopeContainer.querySelector('p').textContent = "Click the envelope to open your Valentine!";
       }
     });
