@@ -1,3 +1,4 @@
+// ELEMENTS
 const gameContainer = document.getElementById("gameContainer");
 const envelopeContainer = document.getElementById("envelopeContainer");
 const envelope = document.getElementById("envelope");
@@ -7,10 +8,8 @@ const noButton = document.getElementById("noButton");
 const celebration = document.getElementById("celebration");
 const floatingContainer = document.getElementById("floating-emojis");
 
-const dodgeDistance = 150;
+// ------------------ FLOATING EMOJIS ------------------
 const driftingEmojis = ['💖','✨','🌸','💌','🐱','🎀','🍬'];
-
-// ------------------ DRIFTING EMOJIS ------------------
 function spawnDriftingEmoji() {
     const el = document.createElement('div');
     el.textContent = driftingEmojis[Math.floor(Math.random() * driftingEmojis.length)];
@@ -37,95 +36,110 @@ function spawnDriftingEmoji() {
 }
 setInterval(spawnDriftingEmoji, 500);
 
-// ------------------ MINI-GAME: DRIFTING HEARTS ------------------
-function spawnCatchHeart() {
+// ------------------ DRAG HEART MINI-GAME ------------------
+const heartsCount = 10;
+let heartsCollected = 0;
+
+for(let i=0; i<heartsCount; i++){
     const heart = document.createElement('div');
     heart.textContent = '💖';
-    heart.className = 'catch-heart';
-    heart.style.left = Math.random() * (window.innerWidth - 80) + 'px';
-    heart.style.top = Math.random() * (window.innerHeight - 80) + 'px';
+    heart.className = 'heart-drag';
+    heart.style.left = Math.random()*(window.innerWidth-50)+'px';
+    heart.style.top = Math.random()*(window.innerHeight/2)+'px';
     gameContainer.appendChild(heart);
 
-    let dx = Math.random() * 2 - 1;
-    let dy = Math.random() * 2 - 1;
+    heart.onmousedown = function(e){
+        let shiftX = e.clientX - heart.getBoundingClientRect().left;
+        let shiftY = e.clientY - heart.getBoundingClientRect().top;
 
-    function move() {
-        let x = parseFloat(heart.style.left) + dx*2;
-        let y = parseFloat(heart.style.top) + dy*2;
+        function moveAt(pageX, pageY) {
+            heart.style.left = pageX - shiftX + 'px';
+            heart.style.top = pageY - shiftY + 'px';
+        }
+        moveAt(e.pageX, e.pageY);
 
-        if (x < 0 || x > window.innerWidth-60) dx *= -1;
-        if (y < 0 || y > window.innerHeight-60) dy *= -1;
+        function onMouseMove(e){
+            moveAt(e.pageX, e.pageY);
+        }
+        document.addEventListener('mousemove', onMouseMove);
 
-        heart.style.left = x + 'px';
-        heart.style.top = y + 'px';
-        requestAnimationFrame(move);
+        heart.onmouseup = function(){
+            document.removeEventListener('mousemove', onMouseMove);
+            heart.onmouseup = null;
+
+            // CHECK IF OVER ENVELOPE
+            const heartRect = heart.getBoundingClientRect();
+            const envRect = envelope.getBoundingClientRect();
+            if (!(heartRect.right < envRect.left || 
+                heartRect.left > envRect.right || 
+                heartRect.bottom < envRect.top || 
+                heartRect.top > envRect.bottom)){
+                heart.remove();
+                heartsCollected++;
+                if(heartsCollected >= heartsCount){
+                    // unlock envelope
+                    envelopeContainer.classList.remove('hidden');
+                }
+            }
+        }
     }
-    move();
-
-    heart.addEventListener('click', () => {
-        gameContainer.classList.add('hidden');
-        envelopeContainer.classList.remove('hidden');
-        envelopeContainer.style.display = 'block';
-    });
+    heart.ondragstart = () => false;
 }
 
-// spawn multiple drifting hearts
-for (let i=0; i<5; i++) spawnCatchHeart();
-
 // ------------------ ENVELOPE OPEN ------------------
-envelopeContainer.addEventListener('click', () => {
+envelope.addEventListener('click', () => {
     envelope.classList.add('open');
     envelopeContainer.style.pointerEvents = 'none';
-    setTimeout(() => {
+    setTimeout(()=>{
+        gameContainer.classList.add('hidden');
         envelopeContainer.style.display = 'none';
         mainCard.classList.remove('hidden');
     }, 600);
 });
 
 // ------------------ NO BUTTON DODGE ------------------
+const dodgeDistance = 150;
 noButton.addEventListener('mousemove', (e) => {
     const rect = noButton.getBoundingClientRect();
     const cursorX = e.clientX;
     const cursorY = e.clientY;
 
-    const btnCenterX = rect.left + rect.width / 2;
-    const btnCenterY = rect.top + rect.height / 2;
+    const btnCenterX = rect.left + rect.width/2;
+    const btnCenterY = rect.top + rect.height/2;
 
     const dx = btnCenterX - cursorX;
     const dy = btnCenterY - cursorY;
-    const distance = Math.sqrt(dx * dx + dy * dy);
+    const distance = Math.sqrt(dx*dx + dy*dy);
 
-    if (distance < 100) {
-        let newX = rect.left + dx / distance * dodgeDistance;
-        let newY = rect.top + dy / distance * dodgeDistance;
-
+    if(distance < 100){
+        let newX = rect.left + dx/distance*dodgeDistance;
+        let newY = rect.top + dy/distance*dodgeDistance;
         newX = Math.max(10, Math.min(window.innerWidth - rect.width - 10, newX));
         newY = Math.max(10, Math.min(window.innerHeight - rect.height - 10, newY));
-
-        noButton.style.left = newX + 'px';
-        noButton.style.top = newY + 'px';
+        noButton.style.left = newX+'px';
+        noButton.style.top = newY+'px';
     }
 });
 
 // ------------------ YES BUTTON CELEBRATION ------------------
 yesButton.addEventListener('click', () => {
-    celebration.classList.remove('hidden');
+    document.getElementById('celebration').classList.remove('hidden');
     spawnCelebration('💖', 30);
     spawnCelebration('✨', 25);
     spawnCelebration('🎉', 20);
 });
 
-function spawnCelebration(emoji, count) {
-    for (let i = 0; i < count; i++) {
-        const el = document.createElement('div');
-        el.textContent = emoji;
-        el.style.position = 'fixed';
-        el.style.left = Math.random() * window.innerWidth + 'px';
-        el.style.top = Math.random() * window.innerHeight + 'px';
-        el.style.fontSize = (Math.random() * 30 + 20) + 'px';
-        el.style.pointerEvents = 'none';
-        el.style.transition = 'all 3s linear';
+function spawnCelebration(emoji,count){
+    for(let i=0;i<count;i++){
+        const el=document.createElement('div');
+        el.textContent=emoji;
+        el.style.position='fixed';
+        el.style.left=Math.random()*window.innerWidth+'px';
+        el.style.top=Math.random()*window.innerHeight+'px';
+        el.style.fontSize=(Math.random()*30+20)+'px';
+        el.style.pointerEvents='none';
+        el.style.transition='all 3s linear';
         document.body.appendChild(el);
-        setTimeout(() => el.remove(), 3000);
+        setTimeout(()=>el.remove(),3000);
     }
 }
