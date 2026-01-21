@@ -1,19 +1,13 @@
 body {
   margin: 0;
   font-family: 'Comic Sans MS', cursive, sans-serif;
-  background: linear-gradient(135deg, #ffeef2, #fce5f0, #fff0f5);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  background: linear-gradient(135deg,#ffeef2,#fce5f0,#fff0f5);
   overflow: hidden;
   text-align: center;
-  min-height: 100vh;
 }
 
-/* Hide elements initially */
 .hidden { display: none; }
 
-/* Floating emojis */
 #floating-emojis div {
   position: fixed;
   font-size: 24px;
@@ -21,8 +15,18 @@ body {
   transition: transform 0.05s linear;
 }
 
-/* Mini-game */
 #gameContainer { position: relative; width: 100%; height: 100vh; }
+
+#heartsContainer { position: relative; width: 100%; height: 70vh; }
+
+.heart-float {
+  position: absolute;
+  font-size: 50px;
+  cursor: pointer;
+  user-select: none;
+  transition: transform 0.2s;
+}
+.heart-float:hover { transform: scale(1.3); }
 
 #envelopeContainer {
   position: absolute;
@@ -32,30 +36,17 @@ body {
   text-align: center;
   width: 120px;
   height: 120px;
-  z-index: 10;
 }
-
-#envelope { font-size: 100px; transition: transform 0.5s ease; }
+#envelopeContainer.locked p { color: #ff4d85; }
+#envelope { font-size: 100px; cursor: pointer; transition: transform 0.5s ease; }
 #envelope.open { transform: rotateX(180deg); }
-#envelopeContainer p { color: #ff4d85; margin-top: 5px; }
 
-/* Draggable hearts */
-.heart-drag {
-  position: absolute;
-  font-size: 50px;
-  cursor: grab;
-  user-select: none;
-  transition: transform 0.2s;
-}
-.heart-drag:hover { transform: scale(1.2); }
-
-/* Card */
-.container, .card { position: relative; }
 .card {
   background: rgba(255,255,255,0.95);
   padding: 40px 30px;
   border-radius: 20px;
   max-width: 450px;
+  margin: 50px auto;
   box-shadow: 0 10px 25px rgba(0,0,0,0.2);
 }
 .emoji-display { font-size: 40px; margin-bottom: 15px; }
