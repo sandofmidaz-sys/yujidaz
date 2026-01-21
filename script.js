@@ -4,7 +4,37 @@ const mainCard = document.getElementById("mainCard");
 const noButton = document.getElementById("noButton");
 const yesButton = document.getElementById("yesButton");
 const celebration = document.getElementById("celebration");
+const floatingContainer = document.getElementById("floating-emojis");
 const dodgeDistance = 150;
+
+// Cute emojis for drifting
+const driftingEmojis = ['💖','✨','🌸','💌','🐱','🎀','🍬'];
+
+// ------------------ DRIFTING EMOJIS ------------------
+function spawnDriftingEmoji() {
+    const el = document.createElement('div');
+    el.textContent = driftingEmojis[Math.floor(Math.random() * driftingEmojis.length)];
+    el.style.left = Math.random() * window.innerWidth + 'px';
+    el.style.top = window.innerHeight + 'px';
+    el.style.fontSize = (Math.random() * 24 + 20) + 'px';
+    el.style.opacity = Math.random() * 0.8 + 0.2;
+    floatingContainer.appendChild(el);
+
+    let posY = window.innerHeight;
+    const speed = Math.random() * 1.5 + 0.5;
+
+    const interval = setInterval(() => {
+        posY -= speed;
+        el.style.top = posY + 'px';
+        if (posY < -50) {
+            el.remove();
+            clearInterval(interval);
+        }
+    }, 20);
+}
+
+// Spawn emojis continuously
+setInterval(spawnDriftingEmoji, 300);
 
 // ------------------ ENVELOPE OPEN ------------------
 envelopeContainer.addEventListener('click', () => {
@@ -13,10 +43,7 @@ envelopeContainer.addEventListener('click', () => {
     setTimeout(() => {
         envelopeContainer.style.display = 'none';
         mainCard.classList.remove('hidden');
-        spawnFloating('💖', 20);
-        spawnFloating('✨', 15);
-        spawnFloating('🎉', 10);
-    }, 600); // match CSS animation duration
+    }, 600);
 });
 
 // ------------------ NO BUTTON DODGE ------------------
@@ -47,13 +74,13 @@ noButton.addEventListener('mousemove', (e) => {
 // ------------------ YES BUTTON ------------------
 yesButton.addEventListener('click', () => {
     celebration.classList.remove('hidden');
-    spawnFloating('💖', 30);
-    spawnFloating('✨', 25);
-    spawnFloating('🎉', 20);
+    spawnCelebration('💖', 30);
+    spawnCelebration('✨', 25);
+    spawnCelebration('🎉', 20);
 });
 
-// ------------------ FLOATING EMOJIS ------------------
-function spawnFloating(emoji, count) {
+// ------------------ CELEBRATION EMOJIS ------------------
+function spawnCelebration(emoji, count) {
     for (let i = 0; i < count; i++) {
         const el = document.createElement('div');
         el.textContent = emoji;
