@@ -1,7 +1,23 @@
+const envelope = document.getElementById("envelope");
+const envelopeContainer = document.getElementById("envelopeContainer");
+const mainCard = document.getElementById("mainCard");
 const noButton = document.getElementById("noButton");
 const yesButton = document.getElementById("yesButton");
 const celebration = document.getElementById("celebration");
 const dodgeDistance = 150;
+
+// ------------------ ENVELOPE OPEN ------------------
+envelopeContainer.addEventListener('click', () => {
+    envelope.classList.add('open');
+
+    setTimeout(() => {
+        envelopeContainer.style.display = 'none';
+        mainCard.classList.remove('hidden');
+        spawnFloating('💖', 20);
+        spawnFloating('✨', 15);
+        spawnFloating('🎉', 10);
+    }, 600); // match CSS animation duration
+});
 
 // ------------------ NO BUTTON DODGE ------------------
 noButton.addEventListener('mousemove', (e) => {
@@ -48,7 +64,6 @@ function spawnFloating(emoji, count) {
         el.style.pointerEvents = 'none';
         el.style.transition = 'all 3s linear';
         document.body.appendChild(el);
-
         setTimeout(() => el.remove(), 3000);
     }
 }
