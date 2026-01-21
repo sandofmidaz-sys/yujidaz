@@ -9,6 +9,15 @@ body {
   min-height: 100vh;
   overflow: hidden;
   text-align: center;
+  cursor: default;
+}
+
+/* ------------------ DRIFTING EMOJIS ------------------ */
+#floating-emojis div {
+  position: fixed;
+  font-size: 24px;
+  pointer-events: none;
+  transition: transform 0.05s linear;
 }
 
 /* ------------------ FLOATING HEARTS ------------------ */
@@ -53,8 +62,12 @@ body {
 }
 
 .envelope {
-  font-size: 80px;
-  transition: transform 0.5s ease;
+  font-size: 120px; /* bigger envelope */
+  transition: transform 0.3s ease;
+}
+
+.envelope:hover {
+  transform: scale(1.2) rotateX(0deg);
 }
 
 .envelope.open {
@@ -62,9 +75,9 @@ body {
 }
 
 .envelope-text {
-  font-size: 18px;
+  font-size: 20px;
   color: #ff4d85;
-  margin-top: 10px;
+  margin-top: 20px;
 }
 
 /* ------------------ CARD ------------------ */
