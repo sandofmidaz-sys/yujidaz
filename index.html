@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Valentine's Day</title>
+  <title>Valentine Adventure</title>
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -19,8 +19,14 @@
     <div class="heart"></div>
   </div>
 
+  <!-- Mini-game: Catch the heart -->
+  <div class="game-container" id="gameContainer">
+    <h2>Catch the heart to get your Valentine!</h2>
+    <div class="catch-heart" id="catchHeart">💖</div>
+  </div>
+
   <!-- Envelope overlay -->
-  <div class="envelope-container" id="envelopeContainer">
+  <div class="envelope-container hidden" id="envelopeContainer">
     <div class="envelope" id="envelope">💌</div>
     <p class="envelope-text">Click to open your Valentine!</p>
   </div>
