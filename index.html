@@ -1,45 +1,43 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Valentine Adventure</title>
-  <link rel="stylesheet" href="styles.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Valentine Adventure</title>
+<link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <!-- Floating emojis in the background -->
-  <div id="floating-emojis"></div>
 
-  <!-- Mini-game container -->
-  <div id="gameContainer">
-    <h2>Drag the hearts into the envelope to unlock your Valentine!</h2>
+<div id="floating-emojis"></div>
 
-    <!-- Draggable hearts will be inserted by JS -->
+<!-- Mini-game -->
+<div id="gameContainer">
+  <h2>Collect 10 hearts to unlock your Valentine! 💖</h2>
+  <div id="heartsContainer"></div>
 
-    <!-- Envelope to drop hearts into -->
-    <div id="envelopeContainer">
-      <div id="envelope">💌</div>
-      <p>Drag hearts here!</p>
+  <div id="envelopeContainer" class="locked">
+    <div id="envelope">💌</div>
+    <p>Collect all hearts first!</p>
+  </div>
+</div>
+
+<!-- Main Valentine card -->
+<div id="mainCard" class="hidden">
+  <div class="card">
+    <div class="emoji-display">💕</div>
+    <h1>Camille Anndrea Julgan Lebico, will you be my Valentine? :3 -Josh Daz</h1>
+    <p>my treat hehe :3</p>
+    <div class="button-container">
+      <button id="yesButton" class="button yes-button">YES! 💖</button>
+      <button id="noButton" class="button no-button">No</button>
     </div>
   </div>
-
-  <!-- Main Valentine card -->
-  <div id="mainCard" class="hidden">
-    <div class="card">
-      <div class="emoji-display">💕</div>
-      <h1>Camille Anndrea Julgan Lebico, will you be my Valentine? :3 -Josh Daz</h1>
-      <p>my treat hehe :3</p>
-      <div class="button-container">
-        <button id="yesButton" class="button yes-button">YES! 💖</button>
-        <button id="noButton" class="button no-button">No</button>
-      </div>
-    </div>
-    <div id="celebration" class="hidden">
-      <h2>YESSS!! 🎉</h2>
-      <p>I'm so happy! Let's make it amazing!</p>
-    </div>
+  <div id="celebration" class="hidden">
+    <h2>YESSS!! 🎉</h2>
+    <p>I'm so happy! Let's make it amazing!</p>
   </div>
+</div>
 
-  <script src="script.js"></script>
+<script src="script.js"></script>
 </body>
 </html>
